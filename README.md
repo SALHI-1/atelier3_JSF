@@ -72,8 +72,8 @@ Le diagramme de classes ci-dessous illustre les relations entre les entités JPA
 
 1.  **Cloner le dépôt :**
     ```bash
-    git clone <URL_DU_DEPOT>
-    cd <NOM_DU_REPERTOIRE>
+    git clone <https://github.com/SALHI-1/atelier3_JSF.git>
+    cd <atelier3_JSF>
     ```
 2.  **Compiler le projet (générer le fichier `.war`) :**
     ```bash
@@ -90,4 +90,5 @@ Des exemples d'interface sont disponibles dans le répertoire `docs/`.
 * ![Vitrine](docs/vitrine.png)
 * ![Panier](docs/panier.png)
 * ![Commandes](docs/commande.png)
+
 

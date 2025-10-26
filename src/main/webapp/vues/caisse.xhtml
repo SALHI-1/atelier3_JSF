@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="fr"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="jakarta.faces.core"
+      xmlns:h="jakarta.faces.html"
+      xmlns:ui="jakarta.faces.facelets">
+<f:view>
+    <h:head>
+        <meta charset="UTF-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <title>Caisse • e‑Commerce</title>
+        <script src="https://cdn.tailwindcss.com"></script>
+    </h:head>
+
+    <h:body class="bg-gray-900 text-gray-100 min-h-screen">
+        <ui:include src="/WEB-INF/includes/header.xhtml"/>
+
+        <main class="max-w-6xl mx-auto px-6 py-12 space-y-10">
+
+            <h1 class="text-3xl font-bold text-emerald-400 text-center mb-8 tracking-wide">
+                🛒 Caisse
+            </h1>
+
+            <!-- Message si non connecté -->
+            <h:panelGroup rendered="#{empty authBean.currentUser}"
+                          class="bg-yellow-100/10 border border-yellow-400/30 rounded-2xl p-6 backdrop-blur-md text-center text-yellow-300">
+                Veuillez vous connecter pour continuer votre commande.
+                <div class="mt-3">
+                    <h:link outcome="/vues/login.xhtml"
+                            styleClass="text-emerald-400 hover:text-emerald-300 underline font-semibold">
+                        Se connecter
+                    </h:link>
+                </div>
+            </h:panelGroup>
+
+            <!-- Si connecté -->
+            <h:panelGroup rendered="#{not empty authBean.currentUser}" class="space-y-10">
+
+                <!-- Panier vide -->
+                <h:panelGroup rendered="#{empty panierBean.panier or empty panierBean.panier.lignes}">
+                    <div class="bg-white/10 backdrop-blur-md border border-gray-700 rounded-2xl p-8 text-center text-gray-400 shadow-lg">
+                        Votre panier est vide.
+                        <div class="mt-3">
+                            <h:link outcome="/vues/vitrine.xhtml"
+                                    class="text-emerald-400 hover:text-emerald-300 underline font-semibold">
+                                Retour à la vitrine
+                            </h:link>
+                        </div>
+                    </div>
+                </h:panelGroup>
+
+                <!-- Panier avec produits -->
+                <h:panelGroup rendered="#{not empty panierBean.panier and not empty panierBean.panier.lignes}">
+                    <div class="grid md:grid-cols-2 gap-8">
+
+                        <!-- Résumé du panier -->
+                        <section class="bg-white/10 backdrop-blur-md border border-gray-700 rounded-2xl p-6 shadow-lg">
+                            <h2 class="text-xl font-semibold text-emerald-400 mb-4">Résumé du panier</h2>
+                            <div class="divide-y divide-gray-700 text-gray-200">
+                                <ui:repeat value="#{panierBean.panier.lignes}" var="ligne">
+                                    <div class="py-3 flex justify-between items-center">
+                                        <div class="font-medium">#{ligne.produit.nom}</div>
+                                        <div class="text-gray-400">x #{ligne.quantite}</div>
+                                        <div class="font-semibold text-emerald-400">#{ligne.sousTotal} DH</div>
+                                    </div>
+                                </ui:repeat>
+                            </div>
+                            <div class="mt-6 flex justify-between text-gray-200 font-semibold text-lg">
+                                <span>Total</span>
+                                <span class="text-emerald-400">#{panierBean.panier.total} DH</span>
+                            </div>
+                        </section>
+
+                        <!-- Adresse de livraison -->
+                        <section class="bg-white/10 backdrop-blur-md border border-gray-700 rounded-2xl p-6 shadow-lg">
+                            <h2 class="text-xl font-semibold text-emerald-400 mb-4">Adresse de livraison</h2>
+                            <h:form>
+                                <div class="space-y-4">
+                                    <h:inputTextarea value="#{commandeBean.adresseLivraison}" required="true"
+                                                     styleClass="w-full min-h-[120px] px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-400"
+                                                     requiredMessage="L’adresse de livraison est requise"/>
+                                    <h:commandButton value="Valider la commande" action="#{commandeBean.validerCommande}"
+                                                     styleClass="w-full px-5 py-3 bg-emerald-600 text-white font-semibold rounded-lg hover:bg-emerald-500 transition-colors"/>
+                                </div>
+                            </h:form>
+                        </section>
+
+                    </div>
+                </h:panelGroup>
+
+            </h:panelGroup>
+
+        </main>
+    </h:body>
+</f:view>
+</html>

@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="fr"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="jakarta.faces.core"
+      xmlns:h="jakarta.faces.html"
+      xmlns:ui="jakarta.faces.facelets">
+<f:view>
+    <f:metadata>
+        <f:viewAction action="#{commandeBean.loadHistorique}"/>
+    </f:metadata>
+
+    <h:head>
+        <meta charset="UTF-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <title>Mon compte • e‑Commerce</title>
+        <script src="https://cdn.tailwindcss.com"></script>
+    </h:head>
+
+    <h:body class="bg-gray-900 text-gray-100 min-h-screen">
+        <ui:include src="/WEB-INF/includes/header.xhtml"/>
+
+        <main class="max-w-6xl mx-auto px-6 py-10 space-y-10">
+
+            <h1 class="text-3xl font-bold text-emerald-400 text-center mb-8 tracking-wide">
+                👤 Mon compte
+            </h1>
+
+            <!-- Message si non connecté -->
+            <h:panelGroup rendered="#{empty authBean.currentUser}"
+                          styleClass="bg-yellow-100/10 border border-yellow-400/30 rounded-2xl p-6 backdrop-blur-md text-center text-yellow-300">
+                Veuillez vous connecter pour accéder à votre espace.
+                <div class="mt-3">
+                    <h:link outcome="/vues/login.xhtml"
+                            styleClass="text-emerald-400 hover:text-emerald-300 underline font-semibold">
+                        Se connecter
+                    </h:link>
+                </div>
+            </h:panelGroup>
+
+            <!-- Si connecté -->
+            <h:panelGroup rendered="#{not empty authBean.currentUser}" class="space-y-10">
+
+                <!-- Informations utilisateur -->
+                <section class="bg-white/10 backdrop-blur-md border border-gray-700 rounded-2xl p-6 shadow-lg">
+                    <h2 class="text-xl font-semibold mb-6 text-emerald-400">Informations personnelles</h2>
+                    <div class="grid sm:grid-cols-2 gap-4 text-gray-200">
+                        <div><span class="text-gray-400">Email:</span> #{authBean.currentUser.email}</div>
+                        <div><span class="text-gray-400">Nom:</span> #{authBean.currentUser.nom}</div>
+                        <div><span class="text-gray-400">Prénom:</span> #{authBean.currentUser.prenom}</div>
+                        <div><span class="text-gray-400">Téléphone:</span> #{authBean.currentUser.telephone}</div>
+                        <div class="sm:col-span-2"><span class="text-gray-400">Adresse:</span> #{authBean.currentUser.adresse}</div>
+                        <div><span class="text-gray-400">Ville:</span> #{authBean.currentUser.ville}</div>
+                        <div><span class="text-gray-400">Code postal:</span> #{authBean.currentUser.codePostal}</div>
+                    </div>
+                </section>
+
+                <!-- Historique des commandes -->
+                <section class="space-y-6">
+                    <div class="flex items-center justify-between mb-4">
+                        <h2 class="text-xl font-semibold text-emerald-400">Historique des commandes</h2>
+                        <h:form>
+                            <h:commandButton value="Rafraîchir" action="#{commandeBean.loadHistorique}"
+                                             styleClass="px-4 py-2 text-sm bg-gray-700 hover:bg-gray-600 rounded-md text-gray-200"/>
+                        </h:form>
+                    </div>
+
+                    <h:panelGroup rendered="#{empty commandeBean.historiqueCommandes}"
+                                  styleClass="text-gray-400 text-center">
+                        Aucune commande pour le moment.
+                    </h:panelGroup>
+
+                    <ui:repeat value="#{commandeBean.historiqueCommandes}" var="c">
+                        <div class="bg-white/10 backdrop-blur-md border border-gray-700 rounded-2xl overflow-hidden shadow-lg">
+                            <!-- En-tête commande -->
+                            <div class="bg-gray-800/50 px-6 py-3 flex flex-col sm:flex-row sm:justify-between items-start sm:items-center text-gray-200">
+                                <div class="mb-1 sm:mb-0">
+                                    <span class="font-semibold">Commande</span>
+                                    <span class="ml-2">#{c.dateCommande}</span>
+                                    <span class="ml-2">• #{c.statut}</span>
+                                </div>
+                                <div class="font-semibold text-emerald-400 mt-1 sm:mt-0">
+                                    Total: #{c.total} DH
+                                </div>
+                            </div>
+
+                            <!-- Lignes de commande -->
+                            <div class="px-6 py-4 text-gray-200 divide-y divide-gray-700">
+                                <ui:repeat value="#{c.lignes}" var="l">
+                                    <div class="py-2 grid grid-cols-12 items-center gap-2">
+                                        <div class="col-span-5 text-white font-medium">#{l.produitNom}</div>
+                                        <div class="col-span-2 text-gray-400 text-center">x #{l.quantite}</div>
+                                        <div class="col-span-2 text-right text-gray-400">#{l.prixUnitaire} DH</div>
+                                        <div class="col-span-3 text-right text-emerald-400 font-semibold">#{l.sousTotal} DH</div>
+                                    </div>
+                                </ui:repeat>
+                            </div>
+                        </div>
+                    </ui:repeat>
+                </section>
+            </h:panelGroup>
+        </main>
+    </h:body>
+</f:view>
+</html>

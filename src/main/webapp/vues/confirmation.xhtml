@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="fr"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="jakarta.faces.core"
+      xmlns:h="jakarta.faces.html"
+      xmlns:ui="jakarta.faces.facelets">
+<f:view>
+    <h:head>
+        <meta charset="UTF-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <title>Confirmation • e‑Commerce</title>
+        <script src="https://cdn.tailwindcss.com"></script>
+    </h:head>
+
+    <h:body class="bg-gray-900 text-gray-100 min-h-screen flex flex-col">
+        <ui:include src="/WEB-INF/includes/header.xhtml"/>
+
+        <main class="flex-grow flex items-center justify-center px-4 py-16">
+            <div class="max-w-md w-full bg-white/10 backdrop-blur-md border border-gray-700 rounded-2xl p-10 text-center shadow-xl">
+
+                <!-- Icône de confirmation -->
+                <div class="text-5xl mb-4 text-emerald-400">✅</div>
+
+                <!-- Message principal -->
+                <h1 class="text-2xl font-bold mb-3 text-emerald-400">
+                    Merci ! Votre commande a été validée
+                </h1>
+
+                <p class="text-gray-300 mb-8">
+                    Un récapitulatif a été envoyé à votre e‑mail si votre adresse est renseignée.
+                </p>
+
+                <!-- Boutons d'action -->
+                <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+                    <h:link outcome="/vues/vitrine.xhtml"
+                            styleClass="flex-1 px-5 py-3 bg-emerald-600 text-white font-semibold rounded-lg
+                                        hover:bg-emerald-500 transition-colors">
+                        Continuer mes achats
+                    </h:link>
+                    <h:link outcome="/vues/compte.xhtml"
+                            styleClass="flex-1 px-5 py-3 bg-gray-700 text-gray-100 font-semibold rounded-lg
+                                        hover:bg-gray-600 transition-colors">
+                        Voir mes commandes
+                    </h:link>
+                </div>
+
+            </div>
+        </main>
+    </h:body>
+</f:view>
+</html>
